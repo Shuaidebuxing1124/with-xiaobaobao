@@ -958,4 +958,30 @@ function renderStats() {
   Object.values(stamps).forEach(v => {
     if(v==='early') earlyCount++;
     else if(v==='swim') swimCount++;
-    else if(v==='
+    else if(v==='both') { earlyCount++; swimCount++; bothCount++; }
+  });
+
+  // logs stats
+  const totalLogs = logs.length;
+  let totalStars = 0;
+  logs.forEach(l => totalStars += (l.stars||3));
+  const avgStars = totalLogs ? (totalStars/totalLogs).toFixed(1) : '--';
+
+  document.getElementById('statsGrid').innerHTML = `
+    <div class="stat-item"><span class="stat-num">${totalLogs}</span><div class="stat-label">打卡天数</div></div>
+    <div class="stat-item"><span class="stat-num">${earlyCount}</span><div class="stat-label">早起次数 ☀️</div></div>
+    <div class="stat-item"><span class="stat-num">${swimCount}</span><div class="stat-label">游泳次数 🌊</div></div>
+    <div class="stat-item"><span class="stat-num">${avgStars}</span><div class="stat-label">平均评分 ⭐</div></div>
+  `;
+
+  // countdown to 考研 (estimated 2026.12.26)
+  const examDate = new Date('2026-12-26');
+  const diff = Math.ceil((examDate - now)/(1000*60*60*24));
+  document.getElementById('countdownNum').textContent = diff > 0 ? diff : '已到考研！';
+}
+
+// ======== INIT ========
+renderCalendar();
+</script>
+</body>
+</html>
