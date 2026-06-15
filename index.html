@@ -11,7 +11,7 @@
   --cream:#fdf6ec;--pink:#f2a7b0;--pink-deep:#e07a86;--blue:#89b4d4;--blue-deep:#4a87b3;
   --gold:#e8c56a;--gold-deep:#c9a030;--ink:#3a2a1e;--ink-light:#7a5c48;
   --paper:rgba(254,250,244,0.92);--shadow:rgba(80,40,20,0.12);
-  --red-stamp:#c0392b;--blue-stamp:#2471a3;
+  --red-stamp:#c0392b;--blue-stamp:#2471a3;--purple-stamp:#8e44ad;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Noto Serif SC','ZCOOL XiaoWei',serif;color:var(--ink);min-height:100vh;background:#fdf6ec;}
@@ -86,6 +86,448 @@ body{font-family:'Noto Serif SC','ZCOOL XiaoWei',serif;color:var(--ink);min-heig
 .stamp-icons{display:flex;gap:2px;margin-top:2px;flex-wrap:wrap;justify-content:center;}
 .stamp-early{width:13px;height:13px;border-radius:50%;background:var(--red-stamp);display:flex;align-items:center;justify-content:center;font-size:7px;color:white;border:1.5px solid rgba(0,0,0,0.15);flex-shrink:0;}
 .stamp-swim{width:13px;height:13px;border-radius:50%;background:var(--blue-stamp);display:flex;align-items:center;justify-content:center;font-size:7px;color:white;border:1.5px solid rgba(0,0,0,0.15);flex-shrink:0;}
+.stamp-rest{width:13px;height:13px;border-radius:50%;background:var(--purple-stamp);display:flex;align-items:center;justify-content:center;font-size:7px;color:white;border:1.5px solid rgba(0,0,0,0.15);flex-shrink:0;}
+.stamp-legend{display:flex;gap:14px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-light);}
+.legend-dot-red{width:18px;height:18px;border-radius:50%;background:var(--red-stamp);border:2px solid rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;}
+.legend-dot-blue{width:18px;height:18px;border-radius:50%;background:var(--blue-stamp);border:2px solid rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;}
+.legend-dot-purple{width:18px;height:18px;border-radius:50%;background:var(--purple-stamp);border:2px solid rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(60,30,20,0.35);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
+.modal-overlay.show{display:flex;}
+.modal-box{background:var(--paper);border:3px solid var(--pink);border-radius:20px;padding:24px;max-width:300px;width:90%;box-shadow:6px 6px 0 var(--pink-deep);text-align:center;animation:popIn 0.25s cubic-bezier(0.34,1.56,0.64,1);backdrop-filter:blur(8px);}
+@keyframes popIn{from{transform:scale(0.7);opacity:0;}to{transform:scale(1);opacity:1;}}
+.modal-date{font-family:'ZCOOL XiaoWei',serif;font-size:20px;color:var(--ink);margin-bottom:6px;}
+.modal-hint{font-size:13px;color:var(--ink-light);margin-bottom:16px;}
+.modal-btns{display:flex;flex-direction:column;gap:8px;}
+.modal-stamp-btn{border:none;border-radius:12px;padding:11px 18px;font-family:inherit;font-size:14px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.modal-stamp-btn:hover{transform:translateY(-2px) scale(1.03);}
+.btn-early{background:rgba(192,57,43,0.12);color:var(--red-stamp);border:2px solid var(--red-stamp);}
+.btn-swim{background:rgba(36,113,163,0.12);color:var(--blue-stamp);border:2px solid var(--blue-stamp);}
+.btn-both{background:linear-gradient(135deg,rgba(192,57,43,0.1),rgba(36,113,163,0.1));color:var(--ink);border:2px solid var(--ink-light);}
+.btn-rest{background:rgba(142,68,173,0.12);color:var(--purple-stamp);border:2px solid var(--purple-stamp);}
+.btn-clear{background:rgba(120,90,70,0.08);color:var(--ink-light);border:2px dashed var(--ink-light);font-size:13px;}
+.btn-close{background:none;border:none;color:var(--ink-light);font-size:13px;cursor:pointer;margin-top:4px;text-decoration:underline;}
+
+.log-form{display:flex;flex-direction:column;gap:12px;}
+.log-date-display{font-size:14px;color:var(--ink-light);font-style:italic;}
+.log-textarea{width:100%;min-height:110px;border:2px solid rgba(200,160,100,0.4);border-radius:12px;padding:12px;font-family:inherit;font-size:15px;color:var(--ink);background:rgba(255,255,255,0.7);resize:vertical;line-height:1.7;transition:border 0.2s;outline:none;}
+.log-textarea:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(242,167,176,0.2);}
+.log-textarea::placeholder{color:rgba(120,90,70,0.45);}
+.submit-btn{background:linear-gradient(135deg,var(--pink),var(--pink-deep));color:white;border:none;border-radius:12px;padding:13px 24px;font-family:inherit;font-size:16px;cursor:pointer;letter-spacing:2px;box-shadow:3px 3px 0 var(--pink-deep);transition:all 0.2s;align-self:flex-end;}
+.submit-btn:hover{transform:translateY(-2px);}
+.submit-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+.result-box{display:none;margin-top:14px;background:linear-gradient(135deg,rgba(242,167,176,0.15),rgba(137,180,212,0.15));border:2px solid var(--pink);border-radius:16px;padding:18px;animation:fadeSlideUp 0.4s ease;}
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.result-box.show{display:block;}
+.result-mascot{font-size:40px;text-align:center;margin-bottom:8px;}
+.result-stars{text-align:center;font-size:28px;margin-bottom:10px;letter-spacing:3px;}
+.result-comment{font-size:15px;color:var(--ink);line-height:1.8;text-align:center;}
+.loading-dots{text-align:center;padding:10px;font-size:14px;color:var(--ink-light);}
+.loading-dots span{display:inline-block;animation:blink 1.2s infinite;font-size:20px;}
+.loading-dots span:nth-child(2){animation-delay:0.2s;}
+.loading-dots span:nth-child(3){animation-delay:0.4s;}
+@keyframes blink{0%,100%{opacity:0.2;}50%{opacity:1;}}
+
+.history-list{display:flex;flex-direction:column;gap:10px;max-height:420px;overflow-y:auto;padding-right:4px;}
+.history-list::-webkit-scrollbar{width:6px;}
+.history-list::-webkit-scrollbar-thumb{background:rgba(242,167,176,0.5);border-radius:3px;}
+.history-item{background:rgba(255,255,255,0.6);border:1.5px solid rgba(200,160,100,0.25);border-radius:12px;padding:12px;position:relative;}
+.history-item-date{font-size:12px;color:var(--ink-light);margin-bottom:5px;}
+.history-item-content{font-size:14px;color:var(--ink);line-height:1.6;margin-bottom:7px;}
+.history-item-rating{font-size:13px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.history-stars{font-size:15px;letter-spacing:2px;}
+.history-comment{font-size:13px;color:var(--ink-light);font-style:italic;}
+.history-delete{position:absolute;top:10px;right:10px;background:none;border:none;font-size:14px;cursor:pointer;color:rgba(180,100,100,0.5);}
+.history-delete:hover{color:var(--pink-deep);}
+
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px;}
+.stat-item{background:rgba(255,255,255,0.6);border:1.5px solid rgba(200,160,100,0.2);border-radius:12px;padding:14px;text-align:center;}
+.stat-num{font-family:'ZCOOL XiaoWei',serif;font-size:30px;color:var(--pink-deep);display:block;}
+.stat-label{font-size:12px;color:var(--ink-light);margin-top:4px;}
+.empty-state{text-align:center;color:var(--ink-light);font-size:14px;padding:30px;line-height:2;}
+.exam-countdown{text-align:center;background:linear-gradient(135deg,rgba(242,167,176,0.2),rgba(232,197,106,0.2));border:2px dashed var(--gold-deep);border-radius:14px;padding:16px;margin-bottom:16px;}
+.countdown-num{font-family:'ZCOOL XiaoWei',serif;font-size:48px;color:var(--gold-deep);display:block;line-height:1;}
+.countdown-label{font-size:14px;color:var(--ink-light);margin-top:4px;}
+
+.achievements-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px;}
+.achievement-card{background:rgba(255,255,255,0.6);border:2px solid rgba(200,160,100,0.2);border-radius:14px;padding:14px;text-align:center;transition:all 0.2s;position:relative;}
+.achievement-card.unlocked{border-color:var(--gold);background:linear-gradient(135deg,rgba(232,197,106,0.15),rgba(242,167,176,0.15));box-shadow:3px 3px 0 rgba(232,197,106,0.3);}
+.achievement-card.locked{opacity:0.45;filter:grayscale(0.4);}
+.achievement-icon{font-size:32px;display:block;margin-bottom:6px;}
+.achievement-title{font-family:'ZCOOL XiaoWei',serif;font-size:14px;color:var(--ink);margin-bottom:4px;}
+.achievement-desc{font-size:11px;color:var(--ink-light);line-height:1.4;}
+.achievement-new{position:absolute;top:-6px;right:-6px;background:var(--pink-deep);color:white;font-size:10px;border-radius:10px;padding:2px 6px;}
+
+.celebrate-overlay{display:none;position:fixed;inset:0;background:rgba(60,30,20,0.5);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.celebrate-overlay.show{display:flex;}
+.celebrate-box{background:var(--paper);border:3px solid var(--gold);border-radius:24px;padding:32px 24px;max-width:320px;width:90%;text-align:center;box-shadow:6px 6px 0 var(--gold-deep);animation:popIn 0.35s cubic-bezier(0.34,1.56,0.64,1);}
+.celebrate-emoji{font-size:60px;display:block;margin-bottom:12px;animation:bobble 1s ease-in-out infinite;}
+.celebrate-title{font-family:'ZCOOL XiaoWei',serif;font-size:22px;color:var(--gold-deep);margin-bottom:8px;letter-spacing:2px;}
+.celebrate-msg{font-size:14px;color:var(--ink-light);line-height:1.8;margin-bottom:18px;}
+.celebrate-close{background:linear-gradient(135deg,var(--gold),var(--gold-deep));color:white;border:none;border-radius:12px;padding:12px 28px;font-family:inherit;font-size:15px;cursor:pointer;letter-spacing:2px;}
+
+.footer{text-align:center;padding:24px 20px 90px;font-size:12px;color:rgba(122,92,72,0.5);letter-spacing:2px;}
+@media(max-width:600px){
+  .cal-day{min-height:34px;font-size:12px;}
+  .stamp-early,.stamp-swim,.stamp-rest{width:10px;height:10px;font-size:6px;}
+  .card{padding:14px;}
+  .header-title{font-size:22px;}
+  .achievements-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
+}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="bg-overlay"></div>
+<audio id="bgMusic" loop preload="auto"><source src="music.mp3" type="audio/mpeg"></audio>
+
+<div class="music-bar">
+  <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🔇</button>
+  <span class="music-note paused" id="musicNote">♪</span>
+</div>
+
+<div class="content-wrap">
+<div class="header">
+  <span class="header-mascot" id="mascotEmoji" title="点我！">🐱</span>
+  <div class="header-title">小宝宝的监督日记</div>
+  <div class="header-sub">考研倒计时 · 打卡记录 · 每日总结</div>
+  <div class="speech-bubble" id="mascotSpeech">哼哼，今天的任务完成了吗？小宝宝可是在盯着你的！🔍</div>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('calendar',this)">📅 日历</button>
+  <button class="tab-btn" onclick="switchTab('daily',this)">✏️ 打卡</button>
+  <button class="tab-btn" onclick="switchTab('history',this)">📖 历史</button>
+  <button class="tab-btn" onclick="switchTab('stats',this)">📊 统计</button>
+  <button class="tab-btn" onclick="switchTab('achieve',this)">🏆 成就</button>
+</div>
+
+<div class="panel active" id="panel-calendar">
+  <div class="card">
+    <div class="streak-bar">
+      <span style="font-size:24px;">🔥</span>
+      <div>
+        <div style="display:flex;align-items:baseline;gap:6px;">
+          <span class="streak-num" id="streakNum">0</span>
+          <span style="font-size:14px;color:var(--gold-deep);">天连续打卡</span>
+        </div>
+        <div class="streak-label" id="streakLabel">快来开始你的第一天！</div>
+      </div>
+    </div>
+    <div class="card-title">🗓️ 习惯打卡日历</div>
+    <div class="stamp-legend">
+      <div class="legend-item"><div class="legend-dot-red">☀</div><span>早起</span></div>
+      <div class="legend-item"><div class="legend-dot-blue">🌊</div><span>游泳</span></div>
+      <div class="legend-item"><div class="legend-dot-purple">💤</div><span>休息</span></div>
+      <span style="font-size:12px;color:var(--ink-light);margin-left:auto;">点击日期盖章 ↓</span>
+    </div>
+    <div class="month-nav">
+      <button class="month-nav-btn" onclick="prevMonth()">‹</button>
+      <div class="month-title" id="monthTitle">2026年5月</div>
+      <button class="month-nav-btn" onclick="nextMonth()">›</button>
+    </div>
+    <div class="cal-grid" id="calGrid">
+      <div class="cal-header">日</div><div class="cal-header">一</div><div class="cal-header">二</div>
+      <div class="cal-header">三</div><div class="cal-header">四</div><div class="cal-header">五</div><div class="cal-header">六</div>
+    </div>
+  </div>
+</div>
+
+<div class="panel" id="panel-daily">
+  <div class="card">
+    <div class="card-title">🎯 今日目标</div>
+    <div class="add-goal-row">
+      <input class="goal-input" id="goalInput" placeholder="添加一个今日目标..." maxlength="30" onkeydown="if(event.key==='Enter')addGoal()">
+      <button class="add-goal-btn" onclick="addGoal()">+ 添加</button>
+    </div>
+    <div class="goal-list" id="goalList"></div>
+    <div class="goals-progress" id="goalsProgress"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">✏️ 今日打卡</div>
+    <div class="log-form">
+      <div class="log-date-display" id="logDateDisplay"></div>
+      <textarea class="log-textarea" id="logText" placeholder="今天做了什么呀？写给小宝宝看看～&#10;比如：背了50个考研单词、刷了10道数学题、看了两节网课..."></textarea>
+      <button class="submit-btn" id="submitBtn" onclick="submitLog()">交给小宝宝评分 📨</button>
+    </div>
+    <div class="result-box" id="resultBox">
+      <div class="result-mascot" id="resultMascot"></div>
+      <div class="result-stars" id="resultStars"></div>
+      <div class="result-comment" id="resultComment"></div>
+    </div>
+  </div>
+</div>
+
+<div class="panel" id="panel-history">
+  <div class="card">
+    <div class="card-title">📖 历史记录</div>
+    <div class="history-list" id="historyList"></div>
+  </div>
+</div>
+
+<div class="panel" id="panel-stats">
+  <div class="card">
+    <div class="card-title">📊 学习统计</div>
+    <div class="exam-countdown">
+      <span class="countdown-num" id="countdownNum">--</span>
+      <div class="countdown-label">距离2027年考研还有（天）</div>
+    </div>
+    <div class="stats-grid" id="statsGrid"></div>
+  </div>
+</div>
+
+<div class="panel" id="panel-achieve">
+  <div class="card">
+    <div class="card-title">🏆 小宝宝的荣誉榜</div>
+    <div class="achievements-grid" id="achieveGrid"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="stampModal">
+  <div class="modal-box">
+    <div class="modal-date" id="modalDate"></div>
+    <div class="modal-hint">选择今天要盖的章 🖊</div>
+    <div class="modal-btns">
+      <button class="modal-stamp-btn btn-early" onclick="setStamp('early')">☀️ 早起</button>
+      <button class="modal-stamp-btn btn-swim" onclick="setStamp('swim')">🌊 游泳</button>
+      <button class="modal-stamp-btn btn-both" onclick="setStamp('both')">☀️+🌊 两个都有！</button>
+      <button class="modal-stamp-btn btn-rest" onclick="setStamp('rest')">💤 休息日</button>
+      <button class="modal-stamp-btn btn-clear" onclick="setStamp('none')">🗑 取消所有章</button>
+      <button class="btn-close" onclick="closeModal()">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div class="celebrate-overlay" id="celebrateModal">
+  <div class="celebrate-box">
+    <span class="celebrate-emoji" id="celebrateEmoji">🎉</span>
+    <div class="celebrate-title" id="celebrateTitle">恭喜你！</div>
+    <div class="celebrate-msg" id="celebrateMsg"></div>
+    <button class="celebrate-close" onclick="closeCelebrate()">小宝宝知道了！</button>
+  </div>
+</div>
+
+<div class="footer">小宝宝的监督日记 · 数据存于本地 · 加油考研！📚</div>
+</div>
+
+<script>
+let stamps=JSON.parse(localStorage.getItem('xbb_stamps')||'{}');
+let logs=JSON.parse(localStorage.getItem('xbb_logs')||'[]');
+let goals=JSON.parse(localStorage.getItem('xbb_goals')||'[]');
+let newAchieves=JSON.parse(localStorage.getItem('xbb_new_achieves')||'[]');
+const CAL_START={year:2026,month:5},CAL_END={year:2027,month:1};
+let currentYear=2026,currentMonth=5;
+const now=new Date();
+const ny=now.getFullYear(),nm=now.getMonth()+1;
+if((ny>CAL_START.year||(ny===CAL_START.year&&nm>=CAL_START.month))&&(ny<CAL_END.year||(ny===CAL_END.year&&nm<=CAL_END.month))){currentYear=ny;currentMonth=nm;}
+
+const ACHIEVEMENTS=[
+  {id:'first_log',icon:'🌱',title:'破土而出',desc:'完成第一次打卡',condition:s=>s.totalLogs>=1,msg:'第一次打卡成功！万事开头难，你已经迈出了最重要的一步！小宝宝超级骄傲！'},
+  {id:'log_7',icon:'⭐',title:'初出茅庐',desc:'累计打卡7天',condition:s=>s.totalLogs>=7,msg:'累计打卡7天！小宝宝看到你越来越自律了，哼，就说你可以嘛！'},
+  {id:'log_30',icon:'🌟',title:'一月勇士',desc:'累计打卡30天',condition:s=>s.totalLogs>=30,msg:'整整30天！！小宝宝激动到说不出话！你真的太棒了，坚持就是胜利！'},
+  {id:'log_100',icon:'💫',title:'百日维新',desc:'累计打卡100天',condition:s=>s.totalLogs>=100,msg:'100天打卡！！考研路上你是最闪亮的星！小宝宝已经泪目了（才没有）！'},
+  {id:'early_10',icon:'☀️',title:'晨光战士',desc:'早起10次',condition:s=>s.earlyCount>=10,msg:'早起10次！你比闹钟还准时！小宝宝宣布你是晨光战士，享受清晨的光吧！'},
+  {id:'early_30',icon:'🌅',title:'闻鸡起舞',desc:'早起30次',condition:s=>s.earlyCount>=30,msg:'早起30次！古有闻鸡起舞，今有你！你的作息已经超越了99%的考研人！'},
+  {id:'swim_10',icon:'🐬',title:'水中精灵',desc:'游泳10次',condition:s=>s.swimCount>=10,msg:'游泳10次！劳逸结合才是王道！你既有学霸的努力，又有运动员的体魄，小宝宝服了！'},
+  {id:'swim_30',icon:'🏊',title:'蛟龙出海',desc:'游泳30次',condition:s=>s.swimCount>=30,msg:'游泳30次！蛟龙出海就是你！小宝宝觉得你的自律已经无可挑剔！'},
+  {id:'streak_7',icon:'🔥',title:'七日不息',desc:'连续打卡7天',condition:s=>s.streak>=7,msg:'连续7天打卡！火苗已经点燃！小宝宝宣布你正式进入学习状态，不许熄灭！'},
+  {id:'streak_30',icon:'🌊',title:'洪流滚滚',desc:'连续打卡30天',condition:s=>s.streak>=30,msg:'连续30天！！势不可挡！小宝宝已经震惊到说不出话……你真的是最棒的考研人！'},
+  {id:'five_stars',icon:'👑',title:'完美主义者',desc:'获得一次5星评价',condition:s=>s.maxStars>=5,msg:'拿到5星！！今天的你无敌了！小宝宝高兴得要跳起来，哼，只是稍微有一点点高兴！'},
+  {id:'five_stars_5',icon:'💎',title:'钻石学神',desc:'累计获得5次5星',condition:s=>s.fiveStarCount>=5,msg:'5次5星！！你已经是传说级别的存在了！小宝宝决定给你颁发最高荣誉——钻石学神！'},
+  {id:'both_stamp',icon:'🌈',title:'全能战将',desc:'同一天早起又游泳',condition:s=>s.bothCount>=1,msg:'同一天早起又游泳！！全能战将非你莫属！小宝宝觉得你考研一定没问题的！'},
+  {id:'goals_done',icon:'✅',title:'言出必行',desc:'完成一天所有目标',condition:s=>s.goalsDoneDay>=1,msg:'今天的目标全部完成了！！小宝宝超级满意！言出必行，这才是考研该有的样子！'},
+  {id:'rest_day',icon:'💤',title:'张弛有度',desc:'使用休息日印章',condition:s=>s.restCount>=1,msg:'知道适当休息！小宝宝很欣慰～好好休息才能学得更好，明天继续加油！'},
+];
+
+// MUSIC
+let musicPlaying=false;
+const audio=document.getElementById('bgMusic');
+audio.volume=0.35;
+function toggleMusic(){
+  if(musicPlaying){audio.pause();musicPlaying=false;document.getElementById('musicBtn').textContent='🔇';document.getElementById('musicNote').classList.add('paused');}
+  else{audio.play().catch(()=>{});musicPlaying=true;document.getElementById('musicBtn').textContent='🎵';document.getElementById('musicNote').classList.remove('paused');}
+}
+document.body.addEventListener('click',function ap(){
+  if(!musicPlaying){audio.play().then(()=>{musicPlaying=true;document.getElementById('musicBtn').textContent='🎵';document.getElementById('musicNote').classList.remove('paused');}).catch(()=>{});}
+  document.body.removeEventListener('click',ap);
+},{once:true});
+
+// STAMP SOUND
+function playStampSound(){
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const buf=ctx.createBuffer(1,ctx.sampleRate*0.15,ctx.sampleRate);
+    const data=buf.getChannelData(0);
+    for(let i=0;i<data.length;i++){const t=i/ctx.sampleRate,env=Math.exp(-t*25);data[i]=env*(Math.random()*2-1)*0.6+env*Math.sin(2*Math.PI*180*t)*0.4;}
+    const src=ctx.createBufferSource(),gain=ctx.createGain();
+    src.buffer=buf;src.connect(gain);gain.connect(ctx.destination);gain.gain.value=0.7;src.start();
+    setTimeout(()=>{try{const c2=new(window.AudioContext||window.webkitAudioContext)(),osc=c2.createOscillator(),g2=c2.createGain();osc.connect(g2);g2.connect(c2.destination);osc.frequency.setValueAtTime(800,c2.currentTime);osc.frequency.exponentialRampToValueAtTime(200,c2.currentTime+0.08);g2.gain.setValueAtTime(0.3,c2.currentTime);g2.gain.exponentialRampToValueAtTime(0.001,c2.currentTime+0.1);osc.start();osc.stop(c2.currentTime+0.1);}catch(e){}},60);
+  }catch(e){}
+}
+
+// MASCOT
+const mascots=['🐱','🐰','🐻','🦊','🐼','🐨','🐸'];
+let mascotIdx=0;
+const speeches=['哼哼，今天的任务完成了吗？小宝宝可是在盯着你的！🔍','你已经打开了这个页面，那就必须好好学习！','考研加油！小宝宝相信你可以的！才怪，先给小宝宝看到你努力！','今天早起了吗？游泳了吗？快去盖章！','不要偷懒哦～小宝宝的眼睛很尖的 👀','单词背了多少了？别告诉我一个没背！','今天的题刷完了吗？考研不等人的！','目标设好了吗？设了就要完成哦！'];
+document.getElementById('mascotEmoji').onclick=()=>{mascotIdx=(mascotIdx+1)%mascots.length;document.getElementById('mascotEmoji').textContent=mascots[mascotIdx];document.getElementById('mascotSpeech').textContent=speeches[Math.floor(Math.random()*speeches.length)];};
+
+// TABS
+function switchTab(name,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  btn.classList.add('active');
+  if(name==='history')renderHistory();
+  if(name==='stats')renderStats();
+  if(name==='daily'){updateLogDate();renderGoals();}
+  if(name==='achieve')renderAchievements();
+  if(name==='calendar')updateStreak();
+}
+
+// GOALS
+function todayStr(){return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;}
+function saveGoals(){localStorage.setItem('xbb_goals',JSON.stringify(goals));}
+function addGoal(){
+  const input=document.getElementById('goalInput'),text=input.value.trim();
+  if(!text)return;
+  goals.push({id:Date.now(),text,done:false,date:todayStr()});
+  saveGoals();input.value='';renderGoals();
+}
+function toggleGoal(id){
+  const g=goals.find(g=>g.id===id);
+  if(g){g.done=!g.done;saveGoals();renderGoals();checkGoalsComplete();}
+}
+function deleteGoal(id){goals=goals.filter(g=>g.id!==id);saveGoals();renderGoals();}
+function renderGoals(){
+  const today=todayStr(),todayGoals=goals.filter(g=>g.date===today);
+  const container=document.getElementById('goalList');
+  container.innerHTML='';
+  if(!todayGoals.length){container.innerHTML='<div style="text-align:center;color:var(--ink-light);font-size:13px;padding:10px;">今天还没有目标～点上面添加吧！</div>';document.getElementById('goalsProgress').textContent='';document.getElementById('progressFill').style.width='0%';return;}
+  todayGoals.forEach(g=>{
+    const item=document.createElement('div');item.className='goal-item'+(g.done?' done':'');
+    item.innerHTML=`<div class="goal-check" onclick="toggleGoal(${g.id})">${g.done?'✓':''}</div><div class="goal-text">${escHtml(g.text)}</div><button class="goal-del" onclick="deleteGoal(${g.id})">✕</button>`;
+    container.appendChild(item);
+  });
+  const done=todayGoals.filter(g=>g.done).length,total=todayGoals.length,pct=total?Math.round(done/total*100):0;
+  document.getElementById('goalsProgress').textContent=`今日完成 ${done}/${total}`;
+  document.getElementById('progressFill').style.width=pct+'%';
+}
+function checkGoalsComplete(){
+  const today=todayStr(),todayGoals=goals.filter(g=>g.date===today);
+  if(todayGoals.length>0&&todayGoals.every(g=>g.done)){
+    const stats=getStats();stats.goalsDoneDay=1;checkAndUnlock(stats);
+  }
+}
+
+// CALENDAR
+function saveStamps(){localStorage.setItem('xbb_stamps',JSON.stringify(stamps));}
+function dayKey(y,m,d){return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`;}
+function prevMonth(){currentMonth--;if(currentMonth<1){currentMonth=12;currentYear--;}if(currentYear<CAL_START.year||(currentYear===CAL_START.year&&currentMonth<CAL_START.month)){currentYear=CAL_START.year;currentMonth=CAL_START.month;}renderCalendar();}
+function nextMonth(){currentMonth++;if(currentMonth>12){currentMonth=1;currentYear++;}if(currentYear>CAL_END.year||(currentYear===CAL_END.year&&currentMonth>CAL_END.month)){currentYear=CAL_END.year;currentMonth=CAL_END.month;}renderCalendar();}
+function renderCalendar(){
+  document.getElementById('monthTitle').textContent=`${currentYear}年${currentMonth}月`;
+  const grid=document.getElementById('calGrid');
+  while(grid.children.length>7)grid.removeChild(grid.lastChild);
+  const firstDay=new Date(currentYear,currentMonth-1,1).getDay(),daysInMonth=new Date(currentYear,currentMonth,0).getDate();
+  const todayKey=dayKey(now.getFullYear(),now.getMonth()+1,now.getDate());
+  for(let i=0;i<firstDay;i++){const el=document.createElement('div');el.className='cal-day empty';grid.appendChild(el);}
+  for(let d=1;d<=daysInMonth;d++){
+    const key=dayKey(currentYear,currentMonth,d),dow=new Date(currentYear,currentMonth-1,d).getDay();
+    const el=document.createElement('div');
+    let cls='cal-day';if(key===todayKey)cls+=' today';if(dow===0)cls+=' sunday';if(dow===6)cls+=' saturday';
+    el.className=cls;el.innerHTML=`<span class="day-num">${d}</span><div class="stamp-icons"></div>`;
+    const sv=stamps[key],icons=el.querySelector('.stamp-icons');
+    if(sv==='early'||sv==='both'){const s=document.createElement('div');s.className='stamp-early';s.textContent='☀';icons.appendChild(s);}
+    if(sv==='swim'||sv==='both'){const s=document.createElement('div');s.className='stamp-swim';s.textContent='🌊';icons.appendChild(s);}
+    if(sv==='rest'){const s=document.createElement('div');s.className='stamp-rest';s.textContent='💤';icons.appendChild(s);}
+    el.onclick=()=>openModal(currentYear,currentMonth,d);
+    grid.appendChild(el);
+  }
+  updateStreak();
+}
+
+// STREAK — 休息日也算连续打卡
+function updateStreak(){
+  let streak=0,d=new Date(now);
+  for(let i=0;i<365;i++){
+    const key=dayKey(d.getFullYear(),d.getMonth()+1,d.getDate());
+    if(stamps[key]&&stamps[key]!=='none')streak++;
+    else break;
+    d.setDate(d.getDate()-1);
+  }
+  document.getElementById('streakNum').textContent=streak;
+  const labels=['快来开始你的第一天！','才刚开始，加油！','两天了，继续！','三天！势头不错！','四天，小宝宝开始注意你了！','五天！快到一周了，冲！','六天！明天就是一周！','🔥 整整一周！太棒了！','越来越厉害了！','九天，双位数在望！'];
+  document.getElementById('streakLabel').textContent=streak<labels.length?labels[streak]:`${streak}天连续打卡，小宝宝超级骄傲！`;
+}
+
+// MODAL
+let modalKey=null;
+function openModal(y,m,d){modalKey=dayKey(y,m,d);document.getElementB
+.header{text-align:center;padding:36px 20px 20px;}
+.header-mascot{font-size:56px;display:block;animation:bobble 3s ease-in-out infinite;cursor:pointer;user-select:none;}
+@keyframes bobble{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-8px) rotate(3deg);}}
+.header-title{font-family:'ZCOOL XiaoWei',serif;font-size:28px;color:var(--pink-deep);margin-top:8px;letter-spacing:4px;text-shadow:2px 2px 0 rgba(242,167,176,0.4);}
+.header-sub{font-size:13px;color:var(--ink-light);margin-top:6px;letter-spacing:2px;}
+.speech-bubble{position:relative;background:var(--paper);border:2px solid var(--pink);border-radius:16px;padding:10px 18px;margin:12px auto 0;max-width:340px;font-size:14px;color:var(--ink-light);line-height:1.6;box-shadow:3px 3px 0 var(--pink);backdrop-filter:blur(4px);}
+.speech-bubble::before{content:'';position:absolute;top:-10px;left:50%;transform:translateX(-50%);border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:10px solid var(--pink);}
+.speech-bubble::after{content:'';position:absolute;top:-7px;left:50%;transform:translateX(-50%);border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:9px solid var(--paper);}
+
+.tabs{display:flex;justify-content:center;gap:8px;padding:16px 16px 0;flex-wrap:wrap;}
+.tab-btn{background:var(--paper);border:2px solid var(--pink);border-radius:20px;padding:7px 14px;font-family:inherit;font-size:13px;color:var(--ink-light);cursor:pointer;transition:all 0.2s;box-shadow:2px 2px 0 rgba(242,167,176,0.5);backdrop-filter:blur(4px);}
+.tab-btn:hover{transform:translateY(-2px);}
+.tab-btn.active{background:var(--pink);color:white;box-shadow:3px 3px 0 var(--pink-deep);}
+
+.panel{display:none;padding:16px;max-width:900px;margin:0 auto;}
+.panel.active{display:block;}
+
+.card{background:var(--paper);border:2px solid rgba(200,160,100,0.25);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:4px 4px 0 var(--shadow);position:relative;overflow:hidden;backdrop-filter:blur(6px);}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--pink),var(--blue),var(--gold));}
+.card-title{font-family:'ZCOOL XiaoWei',serif;font-size:18px;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+
+.add-goal-row{display:flex;gap:8px;margin-bottom:10px;}
+.goal-input{flex:1;border:2px solid rgba(200,160,100,0.35);border-radius:10px;padding:8px 12px;font-family:inherit;font-size:14px;color:var(--ink);background:rgba(255,255,255,0.7);outline:none;}
+.goal-input:focus{border-color:var(--pink);}
+.add-goal-btn{background:var(--pink);color:white;border:none;border-radius:10px;padding:8px 14px;font-family:inherit;font-size:14px;cursor:pointer;white-space:nowrap;}
+.goal-list{display:flex;flex-direction:column;gap:6px;}
+.goal-item{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.5);border:1.5px solid rgba(200,160,100,0.2);border-radius:10px;padding:8px 12px;transition:all 0.2s;}
+.goal-item.done{background:rgba(242,167,176,0.12);border-color:var(--pink);}
+.goal-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--pink);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:all 0.2s;flex-shrink:0;}
+.goal-item.done .goal-check{background:var(--pink);color:white;}
+.goal-text{flex:1;font-size:14px;color:var(--ink);}
+.goal-item.done .goal-text{text-decoration:line-through;color:var(--ink-light);}
+.goal-del{background:none;border:none;color:rgba(180,100,100,0.4);cursor:pointer;font-size:14px;}
+.goals-progress{margin-top:8px;font-size:12px;color:var(--ink-light);text-align:right;}
+.progress-bar{height:6px;background:rgba(200,160,100,0.2);border-radius:3px;margin-top:4px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--pink),var(--gold));border-radius:3px;transition:width 0.4s ease;}
+
+.streak-bar{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(242,167,176,0.15),rgba(232,197,106,0.15));border:2px solid var(--gold);border-radius:12px;padding:10px 14px;margin-bottom:14px;}
+.streak-num{font-family:'ZCOOL XiaoWei',serif;font-size:28px;color:var(--gold-deep);}
+.streak-label{font-size:13px;color:var(--ink-light);}
+
+.month-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.month-nav-btn{background:none;border:2px solid var(--pink);border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer;color:var(--pink-deep);display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+.month-nav-btn:hover{background:var(--pink);color:white;transform:scale(1.1);}
+.month-title{font-family:'ZCOOL XiaoWei',serif;font-size:20px;color:var(--ink);letter-spacing:3px;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-header{text-align:center;font-size:12px;color:var(--ink-light);padding:4px 0;font-weight:600;}
+.cal-header:first-child{color:var(--pink-deep);}
+.cal-header:last-child{color:var(--blue-deep);}
+.cal-day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:8px;border:1.5px solid transparent;cursor:pointer;transition:all 0.15s;min-height:40px;background:rgba(255,255,255,0.5);font-size:13px;}
+.cal-day:hover{border-color:var(--pink);background:rgba(242,167,176,0.2);transform:scale(1.05);}
+.cal-day.empty{cursor:default;background:none;}
+.cal-day.today{border-color:var(--gold-deep);background:rgba(232,197,106,0.2);font-weight:700;}
+.cal-day.today .day-num{color:var(--gold-deep);}
+.cal-day.sunday .day-num{color:var(--pink-deep);}
+.cal-day.saturday .day-num{color:var(--blue-deep);}
+.day-num{font-size:13px;line-height:1;}
+.stamp-icons{display:flex;gap:2px;margin-top:2px;flex-wrap:wrap;justify-content:center;}
+.stamp-early{width:13px;height:13px;border-radius:50%;background:var(--red-stamp);display:flex;align-items:center;justify-content:center;font-size:7px;color:white;border:1.5px solid rgba(0,0,0,0.15);flex-shrink:0;}
+.stamp-swim{width:13px;height:13px;border-radius:50%;background:var(--blue-stamp);display:flex;align-items:center;justify-content:center;font-size:7px;color:white;border:1.5px solid rgba(0,0,0,0.15);flex-shrink:0;}
+.stamp-rest{width:13px;height:13px;border-radius:50%;background:#8e44ad;display:flex;align-items:center;justify-content:center;font-size:7px;color:white;border:1.5px solid rgba(0,0,0,0.15);flex-shrink:0;}
+.legend-dot-purple{width:18px;height:18px;border-radius:50%;background:#8e44ad;border:2px solid rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;}
+.btn-rest{background:rgba(142,68,173,0.12);color:#8e44ad;border:2px solid #8e44ad;}
 .stamp-legend{display:flex;gap:14px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-light);}
 .legend-dot-red{width:18px;height:18px;border-radius:50%;background:var(--red-stamp);border:2px solid rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;}
